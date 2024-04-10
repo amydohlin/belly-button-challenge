@@ -11,22 +11,46 @@ d3.json(url).then(function(data) {
 });
 
 // Extract the required fields from the sample object
-// const samples = data.samples_values;
+const samples = data.samples_values;
+
+// // Check if the samples array is not empty
+// if (samples.length > 0) {
+//     // Get the first sample for demonstration purposes
+//     const sample = samples[0];
+//     const sampleValues = sample.sample_values;
+//     const otuIds = sample.otu_ids;
+//     const otuLabels = sample.otu_labels;
+
+//     console.log("Sample Values: ", sampleValues);
+//     console.log("OTU IDs: ", otuIds);
+//     console.log("OTU Labels: ", otuLabels);
+
+//     // Create combinedData array by mapping the values
+//     const combinedData = sampleValues.map((value, index) => ({
+//         sample_value: value,
+//         otu_id: otuIds[index],
+//         otu_label: otuLabels[index]
+//     }));
+
+//     console.log("Combined Data: ", combinedData);
+//     // Proceed with using combinedData
+// } else {
+//     console.log('Samples array is empty.');
+// }
+ //------------------------------------------------------------
 
 // Get the JSON data by using .then() to extract the required data fields (sample values, otuIds, otuLabels)
 d3.json(url).then(function(data) {
     // Getting the required fields. Use const to make sure these variables cannot be changed later.
-    const sampleValues = data.samples;
-
-    // loop thru the array
+    const sampleValues = data.sample_values;
     const otuIds = data.otu_ids;
     const otuLabels = data.otu_labels;
 
-    console.log(sampleValues);
+    console.log("Sample Values: ", sampleValues);
     console.log("OTU IDs: ", otuIds);
     console.log("OTU Labels: ", otuLabels);
 
-    // Test variables (code from Xpert Learning Assistant)
+    // Test variables
     if (sampleValues && otuIds && otuLabels) {
         const combinedData = sampleValues.map((value, index) => ({
             sample_value: value,
