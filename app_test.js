@@ -42,6 +42,7 @@ const samples = data.samples_values;
 // Get the JSON data by using .then() to extract the required data fields (sample values, otuIds, otuLabels)
 d3.json(url).then(function(data) {
     // Getting the required fields. Use const to make sure these variables cannot be changed later.
+    // Find the values by calling the data (data), send it to the samples array (data.samples),
     const sampleValues = data.sample_values;
     const otuIds = data.otu_ids;
     const otuLabels = data.otu_labels;

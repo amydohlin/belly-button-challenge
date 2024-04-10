@@ -1,12 +1,12 @@
 // API call
-const url = "https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json";
+const bellies = "https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json";
 
 // Add a promise pending for data, use D3
-const dataPromise = d3.json(url);
+const dataPromise = d3.json(bellies);
 console.log("Data Promise: ", dataPromise);
 
 // Fetch the JSON data and console log it. This logs the entire data object 
-d3.json(url).then(function(data) {
+d3.json(bellies).then(function(data) {
     console.log(data);
 });
 
@@ -14,14 +14,22 @@ d3.json(url).then(function(data) {
 // const samples = data.samples_values;
 
 // Get the JSON data by using .then() to extract the required data fields (sample values, otuIds, otuLabels)
-d3.json(url).then(function(data) {
-    // Getting the required fields. Use const to make sure these variables cannot be changed later.
-    const sampleValues = data.samples;
+d3.json(bellies).then(function(data) {
+
+    // Initialize arrays for the required data fields (help from Xpert Learning Assistant for loop)
+    let sampleValues = [];
+    let otuIds = [];
+    let otuLabels = [];
+
+    // Getting the required fields. Ref 14-3, activity 04
+    // Use .push() to append the values to the correct array
+    for (let i = 0; i < data.samples.length; i++){
+        sampleValues.push(data.samples[i].sample_values);
+        otuIds.push(data.samples[i].otu_ids);
+        otuLabels.push(data.samples[i].otu_labels);
+    }
 
     // loop thru the array
-    const otuIds = data.otu_ids;
-    const otuLabels = data.otu_labels;
-
     console.log(sampleValues);
     console.log("OTU IDs: ", otuIds);
     console.log("OTU Labels: ", otuLabels);
