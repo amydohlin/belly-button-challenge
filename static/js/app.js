@@ -10,9 +10,6 @@ d3.json(bellies).then(function(data) {
     console.log(data);
 });
 
-// Extract the required fields from the sample object
-// const samples = data.samples_values;
-
 // Get the JSON data by using .then() to extract the required data fields (sample values, otuIds, otuLabels)
 d3.json(bellies).then(function(data) {
 
