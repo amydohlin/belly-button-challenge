@@ -1,65 +1,143 @@
 // API call
-const bellies = "https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json";
+const BELLIES_URL = "https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json";
 
-// Add a promise pending for data, use D3
-const dataPromise = d3.json(bellies);
-console.log("Data Promise: ", dataPromise);
+var globalData = [];
 
-// Fetch the JSON data and console log it. This logs the entire data object 
-d3.json(bellies).then(function(data) {
+// function getSubjectData(dataList, subjectID) {
+//     let subjectData = dataList.filter(element => element["id"] == subjectID)[0];
+//     // console.log(subjectData); 
+//     return subjectData;
+// }
+
+
+function demoBox(subjectNo) {
+
+    let metadata = globalData[0].metadata;
+    let metadata1 = metadata.filter(element => element["id"] == subjectNo)[0];
+
+    console.log(subjectNo);
+    console.log("demoBox", metadata1);
+
+}
+
+function barChart(subjectNo) {
+
+    let samples = globalData[0].samples;
+
+    let samples1 = samples.filter(element => element["id"] == subjectNo)[0];
+
+    console.log(subjectNo);
+    console.log("bar", samples1);
+
+    // select just the first 10 items from the bacteria array. use slice
+    let labels1 = samples1['otu_labels'].slice(0,10);
+    let ids1 = samples1['otu_ids'].slice(0,10);
+    let ids2 = ids1.map(x => "OTU " + x);
+
+    console.log("update otu id", ids2);
+    let sliceSample1 = samples1['sample_values'].slice(0,10);
+    console.log('labels sliced',labels1);
+    console.log('ids sliced', ids1);
+    console.log('values sliced', sliceSample1);
+
+
+    let barChart = [{
+        x: sliceSample1,
+        y: ids2,
+        type: 'bar',
+        orientation: "h"
+      }];
+    
+    let layout = {
+        title: "Top 10 OTUs",
+        margin: {t:30, 1:150},
+        xaxis: {"title": "Number of Bacteria"},
+        yaxis: {autorange: 'reversed'}
+    }
+    
+
+      Plotly.newPlot("bar", barChart, layout);
+    
+
+
+}
+
+function bubblePlot(subjectNo) {
+
+    let samples = globalData[0].samples;
+
+    let samples1 = samples.filter(element => element["id"] == subjectNo)[0];
+
+    // select just the first 10 items from the bacteria array. use slice
+    let labels1 = samples1['otu_labels'].slice(0,10);
+    let ids1 = samples1['otu_ids'].slice(0,10);
+    let ids2 = ids1.map(x => "OTU " + x);
+    let sliceSample1 = samples1['sample_values'].slice(0,10);
+    
+
+    console.log(subjectNo);
+    console.log("bubble", samples1);
+
+    var bubble = [{
+        x: ids2,
+        y: sliceSample1,
+        mode: 'markers',
+        marker: {
+          size: [40, 60, 80, 100]
+        }
+      }];
+
+    let layout = {
+        title: "Bacteria",
+        xaxis: {'title': "x"},
+        yaxis: {'title': 'y'},
+        
+    }
+
+}
+
+function optionChanged(subjectNo) {
+    console.log(subjectNo);
+    // d3.json(BELLIES_URL).then(function(allData) {
+    //     let subjectMetaData = getSubjectData(allData['metadata'], subjectID);
+    //     let subjectSamples = getSubjectData(allData['samples'], subjectID);
+    demoBox(subjectNo);
+    bubblePlot(subjectNo);
+    barChart(subjectNo);
+    //})
+    
+
+
+}
+
+// subjMeta['otu_labels'].slice(0, 10).reverse()\
+// subjMeta['otu_ids'].slice(0, 10).reverse().map(id => `OTU ${id}`);
+
+
+
+
+
+
+
+function init(data){
+
+    console.log("init function")
     console.log(data);
-});
 
-// Get the JSON data by using .then() to extract the required data fields (sample values, otuIds, otuLabels)
-d3.json(bellies).then(function(data) {
+    globalData.push(data);
 
-    // Initialize arrays for the required data fields (help from Xpert Learning Assistant for loop)
-    let sampleValues = [];
-    let otuIds = [];
-    let otuLabels = [];
+    let names = data.names;
 
-    // Getting the required fields. Ref 14-3, activity 04
-    // Use .push() to append the values to the correct array
-    for (let i = 0; i < data.samples.length; i++){
-        sampleValues.push(data.samples[i].sample_values);
-        otuIds.push(data.samples[i].otu_ids);
-        otuLabels.push(data.samples[i].otu_labels);
-    }
+    d3.select("select")
+        .selectAll("option")
+        .data(names)
+        .enter()
+        .append("option")
+        .text(function (d) { return d; })
+        .attr("value", function (d) { return d; });
 
-    // loop thru the array
-    console.log(sampleValues);
-    console.log("OTU IDs: ", otuIds);
-    console.log("OTU Labels: ", otuLabels);
 
-    // Test variables (code from Xpert Learning Assistant)
-    if (sampleValues && otuIds && otuLabels) {
-        const combinedData = sampleValues.map((value, index) => ({
-            sample_value: value,
-            otu_id: otuIds[index],
-            otu_label: otuLabels[index]
-        }));
-        // Proceed with using combinedData
-    } else {
-        console.log('One of the arrays is undefined or empty.');
-    }
+}
 
-    // Create an array of objects for sampleValues, otuIds, and otuLabels to make sorting easier. Make the array a const and use .map() and => to push the function.
-    // .map() xforms data into an array; value is an agrument used to rep the current element being processed; index is the index of the current element
-    // being processed; [index] allows the elements from the otu cols to be processed from the same row as sample_value. This ties together by putting each corresponding 
-    // sample value, otu_id, and otu_label in the same row.
-    const combinedData = sampleValues.map((value, index) => ({
-        sample_value: value,
-        otu_id: otuIds[index],
-        otu_label: otuLabels[index]
-    }));
-
-    // Sort data in descending order based on sample_values. Use .sort() and => to push the function. Make it a const.
-    const sortedData = combinedData.sort((a,b) => b.sample_value - a.sample_value);
-
-    // Slice the sorted data so it only shows the top 10 OTUs. Make it a const and use .slice(0,10) (this tells it to pull rows 0 -9 per zero-indexing,
-    // i.e. include index zero and go up to index 10 but exclude index 10).
-    const top10OTUs = sortedData.slice(0,10);
-
-    // Log the top 10 OTUs in the console
-    console.log("Top 10 OTUs: ", top10OTUs);
-});
+// this will execute the init function and read the data. .then() will console log the data
+d3.json(BELLIES_URL).then(data => init(data));
