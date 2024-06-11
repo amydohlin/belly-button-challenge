@@ -24,6 +24,7 @@ function barChart(subjectNo) {
 
     let samples = globalData[0].samples;
 
+    // filter data to only the chosen id
     let samples1 = samples.filter(element => element["id"] == subjectNo)[0];
 
     console.log(subjectNo);
@@ -35,6 +36,7 @@ function barChart(subjectNo) {
     let ids2 = ids1.map(x => "OTU " + x);
 
     console.log("update otu id", ids2);
+
     let sliceSample1 = samples1['sample_values'].slice(0,10);
     console.log('labels sliced',labels1);
     console.log('ids sliced', ids1);
@@ -50,15 +52,15 @@ function barChart(subjectNo) {
     
     let layout = {
         title: "Top 10 OTUs",
-        margin: {t:30, 1:150},
         xaxis: {"title": "Number of Bacteria"},
-        yaxis: {autorange: 'reversed'}
+        yaxis: {autorange: 'reversed'},
+        height: 600,
+        width: 800
     }
     
 
       Plotly.newPlot("bar", barChart, layout);
     
-
 
 }
 
@@ -66,33 +68,36 @@ function bubblePlot(subjectNo) {
 
     let samples = globalData[0].samples;
 
+    // filter data to only the chosen id
     let samples1 = samples.filter(element => element["id"] == subjectNo)[0];
-
-    // select just the first 10 items from the bacteria array. use slice
-    let labels1 = samples1['otu_labels'].slice(0,10);
-    let ids1 = samples1['otu_ids'].slice(0,10);
-    let ids2 = ids1.map(x => "OTU " + x);
-    let sliceSample1 = samples1['sample_values'].slice(0,10);
-    
+  
 
     console.log(subjectNo);
     console.log("bubble", samples1);
 
+    // use samples1 as the subject, then use . notation to call the specific dictionary keys
     var bubble = [{
-        x: ids2,
-        y: sliceSample1,
+        x: samples1.otu_ids,
+        y: samples1.sample_values,
         mode: 'markers',
         marker: {
-          size: [40, 60, 80, 100]
-        }
+          size: samples1.sample_values,
+          color: samples1.otu_ids,
+          opacity: 0.75
+        },
+        text: samples1.otu_labels,
       }];
 
     let layout = {
-        title: "Bacteria",
-        xaxis: {'title': "x"},
-        yaxis: {'title': 'y'},
+        title: "Bacteria Cultures Per Sample",
+        xaxis: {'title': "OTU ID"},
+        yaxis: {'title': "Number of Bacteria"},
+        height: 600,
+        width: 1200
         
     }
+
+    Plotly.newPlot("bubble", bubble, layout)
 
 }
 
