@@ -1,6 +1,8 @@
 # belly-button-challenge
 # Module 14 - Interactive Visualizations
 
+Interactive Page: https://amydohlin.github.io/belly-button-challenge/
+
 ## Overview
 The goal of this challenge was to build an interactive dashboard to visualize data about the microbes found in the human navel. This challenge requires the use of the D3 library to read in JSON data, create a bar chart with a drop-down menu, a bubble chart with various marker colors and sizes, implement the ability to update the plots when new data is selected, create a dashboard, and deploy the finished dashboard to a free static page hosting service (in this case: GitHub Pages).
 
