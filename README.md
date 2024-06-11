@@ -1,53 +1,29 @@
 # belly-button-challenge
 # Module 14 - Interactive Visualizations
 
-Interactive Page: https://amydohlin.github.io/belly-button-challenge/
-
 ## Overview
 The goal of this challenge was to build an interactive dashboard to visualize data about the microbes found in the human navel. This challenge requires the use of the D3 library to read in JSON data, create a bar chart with a drop-down menu, a bubble chart with various marker colors and sizes, implement the ability to update the plots when new data is selected, create a dashboard, and deploy the finished dashboard to a free static page hosting service (in this case: GitHub Pages).
 
-If time allows for an extra challenge, adapt a gauge chart to plot an individual's weekly washing frequency of their belly button, and be able to update it when a new sample is chosen.
+Interactive Page: https://amydohlin.github.io/belly-button-challenge/
+
+Data Source (can also be found in the 'data' folder withing the repository): https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json
 
 --------
-## Analysis
-Bar Chart (30 points)
-Chart initializes without error (10 points)
-
-Chart updates when a new sample is selected (5 points)
-
-Chart uses Top 10 sample values as values (5 points)
-
-Chart uses otu_ids as the labels (5 points)
-
-Chart uses otu_labels as the tooltip (5 points)
-
-------------------------
-Bubble Charts (40 points)
-Chart initializes without error (10 points)
-
-Chart updates when a new sample is selected (5 points)
-
-Chart uses otu_ids for the x values (5 points)
-
-Chart uses otu_ids for marker colors (5 points)
-
-Chart uses sample_values for the y values (5 points)
-
-Chart uses sample_values for the marker size (5 points)
-
-Chart uses `otu_labels for text values (5 points)
-
-------------------------
-Metadata and Deployment (30 points)
-Metadata initializes without error (10 points)
-
-Metadata updates when a new sample is selected (10 points)
-
-App Successfully Deployed to Github Pages (10 points)
-
--------
 ## Summary
-
+* D3 is a Java Script library that allows a programmer to read in data from a JSON source and put it into various visualizations.
+* Within the Java Script file "app.js", various functions are defined to populate the demographics box, create a bar chart of the top 10 bacteria found in the subject's belly button, create a bubble chart that displays a visual of bacteria quantities, choose a subject from a dropdown menu, and an init function to execute all aforementioned functions.
+* Commands used within functions:
+  * `.filter()`: sifts through data to extract certain elements;
+  * `=>`: define a function;
+  * `.slice()`: only read a certain amount of data;
+* Console.log() commands are used throughout to help examine the code and data within the webpage.
+* Finally, a d3.json().then() command with execute the init function to display data on the interactive webpage.
 
 -------
 ## Sources
+* Xpert Learning Assistant
+* Module 14 Activities
+* https://www.tutorialsteacher.com/d3js/data-binding-in-d3js
+* https://plotly.com/javascript/bar-charts/
+* https://plotly.com/javascript/bubble-charts/
+* Huge thank you to tutor Reza Abasaltian who spent a total of 3 hours helping me through this assignment
