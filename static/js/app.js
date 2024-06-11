@@ -1,4 +1,4 @@
-// API call
+// API call, read in the json samples
 const BELLIES_URL = "https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json";
 
 var globalData = [];
@@ -13,12 +13,33 @@ var globalData = [];
 function demoBox(subjectNo) {
 
     let metadata = globalData[0].metadata;
-    let metadata1 = metadata.filter(element => element["id"] == subjectNo)[0];
+    let metadata1 = metadata.filter(element => element["id"] == subjectNo);
 
     console.log(subjectNo);
     console.log("demoBox", metadata1);
 
+    
+
+    d3.select("#sample-metadata")
+        .selectAll("div")
+        .data(metadata1)
+        .enter()
+        .append("div")
+        .classed("card-demo", true)
+        .style("font-weight", function (d) { return "bold"})
+        .html(function (d) {
+            return `<h6>ID: ${d.id}</h6>
+                    <h6>Ethnicity: ${d.ethnicity}</h6>
+                    <h6>Gender: ${d.gender}</h6>
+                    <h6>Age: ${d.age}</h6>
+                    <h6>Location: ${d.location}</h6>
+                    <h6>Belly Button Type: ${d.bbtype}</h6>
+                    <h6>Wash Frequency: ${d.wfreq}</h6>
+                    `         
+        });
+
 }
+
 
 function barChart(subjectNo) {
 
@@ -33,11 +54,14 @@ function barChart(subjectNo) {
     // select just the first 10 items from the bacteria array. use slice
     let labels1 = samples1['otu_labels'].slice(0,10);
     let ids1 = samples1['otu_ids'].slice(0,10);
+    let sliceSample1 = samples1['sample_values'].slice(0,10);
+    
+    // create the label for the bacteria id as "OTU + [id number]"
     let ids2 = ids1.map(x => "OTU " + x);
 
     console.log("update otu id", ids2);
 
-    let sliceSample1 = samples1['sample_values'].slice(0,10);
+    
     console.log('labels sliced',labels1);
     console.log('ids sliced', ids1);
     console.log('values sliced', sliceSample1);
@@ -60,9 +84,9 @@ function barChart(subjectNo) {
     
 
       Plotly.newPlot("bar", barChart, layout);
-    
 
 }
+
 
 function bubblePlot(subjectNo) {
 
@@ -83,7 +107,7 @@ function bubblePlot(subjectNo) {
         marker: {
           size: samples1.sample_values,
           color: samples1.otu_ids,
-          opacity: 0.75
+          opacity: 0.60
         },
         text: samples1.otu_labels,
       }];
@@ -103,25 +127,15 @@ function bubblePlot(subjectNo) {
 
 function optionChanged(subjectNo) {
     console.log(subjectNo);
-    // d3.json(BELLIES_URL).then(function(allData) {
-    //     let subjectMetaData = getSubjectData(allData['metadata'], subjectID);
-    //     let subjectSamples = getSubjectData(allData['samples'], subjectID);
+   
+    d3.select(".card-demo").remove();
+
     demoBox(subjectNo);
     bubblePlot(subjectNo);
     barChart(subjectNo);
     //})
     
-
-
 }
-
-// subjMeta['otu_labels'].slice(0, 10).reverse()\
-// subjMeta['otu_ids'].slice(0, 10).reverse().map(id => `OTU ${id}`);
-
-
-
-
-
 
 
 function init(data){
@@ -140,6 +154,10 @@ function init(data){
         .append("option")
         .text(function (d) { return d; })
         .attr("value", function (d) { return d; });
+
+    demoBox("940");
+    bubblePlot("940");
+    barChart("940");
 
 
 }
